@@ -1,7 +1,10 @@
 package com.example.winterview.dto;
 
+import lombok.Data;
+
+@Data
 public class UserDto {
-    int idx;
-    String userId;
-    String pw;
+    private int userIdx;
+    private String userId;
+    private String pw;
 }

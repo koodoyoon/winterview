@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #question {
+            width: 700px;
+            height: 400px;
+            border: 1px solid #7a7a7a;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
+<a href="/login.do">로그인</a>
+<a href="/signup.do">회원가입</a>
+<div id="container">
+    <div id="question">
+        <div>
+            <p>면접 예상 질문 등록</p>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

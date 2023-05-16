@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.winterview.mapper.UserMapper">
+    <resultMap id="userMap" type="userDto" autoMapping="true">
+        <id property="userIdx" column="user_idx"/>
+        <result property="userId" column="user_id"/>
+        <result property="pw" column="pw"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userIdx">
+        INSERT INTO user (user_id, pw) VALUES (#{userId}, #{pw})
+    </insert>
+
+    <select id="login" resultMap="userMap">
+        SELECT * FROM user WHERE user_id=#{userId} AND pw=#{pw}
+    </select>
+</mapper>
