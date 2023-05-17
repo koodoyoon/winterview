@@ -2,6 +2,7 @@ package com.example.winterview.controller;
 
 import com.example.winterview.dto.UserDto;
 import com.example.winterview.service.UserSerivce;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -50,13 +51,15 @@ public class UserController {
     @PostMapping("/login.do")
     public String login(
             @RequestParam("userId") String id,
-            String pw
+            String pw,
+            HttpSession session
     ) {
         try {
             UserDto user = userSerivce.login(id, pw);
             if (user == null) { // 로그인 실패
                 return "redirect:/login.do";
             }
+            session.setAttribute("user", user);
             return "redirect:/"; // 로그인 성공
         } catch (Exception e) {
             e.printStackTrace();
