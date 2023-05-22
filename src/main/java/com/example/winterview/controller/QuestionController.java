@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,10 +16,10 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/")
-public class QeustionController {
+public class QuestionController {
     private QuestionService questionService;
 
-    public QeustionController(QuestionService questionService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
@@ -39,5 +41,19 @@ public class QeustionController {
             e.printStackTrace();
             return new ResponseEntity<>(Map.of("success", false), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/randomQuestion.do")
+    public String getRandomQuestion(
+            Model model,
+            HttpSession session) {
+        UserDto user = (UserDto) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login.do";
+        }
+        QuestionDto question = questionService.getRandomQuestion(user.getUserIdx());
+        model.addAttribute("question", question);
+        System.out.println("question : " + question);
+        return "index";
     }
 }

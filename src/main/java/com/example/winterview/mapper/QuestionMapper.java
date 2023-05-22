@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface QuestionMapper {
     int insert(QuestionDto question);
+    QuestionDto selectRandomQuestion(int userIdx);
 }

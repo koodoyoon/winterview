@@ -66,4 +66,12 @@ public class UserController {
             return "redirect:/login.do";
         }
     }
+
+    @GetMapping("/logout.do")
+    public String logout(HttpSession session) {
+        // 세션에 저장된 사용자 정보를 삭제합니다.
+        session.invalidate();
+
+        return "redirect:/";
+    }
 }

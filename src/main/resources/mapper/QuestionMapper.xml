@@ -11,4 +11,7 @@
     <insert id="insert">
         INSERT INTO question (question_content, user_idx) VALUES (#{questionContent}, #{userIdx})
     </insert>
+    <select id="selectRandomQuestion" resultMap="questionMap">
+        SELECT * FROM Question WHERE user_idx = #{userIdx} ORDER BY RAND() LIMIT 1
+    </select>
 </mapper>

@@ -15,4 +15,8 @@ public class QuestionServiceImp implements QuestionService{
     public int register(QuestionDto question) {
         return questionMapper.insert(question);
     }
+
+    public QuestionDto getRandomQuestion(int userIdx) {
+        return questionMapper.selectRandomQuestion(userIdx);
+    }
 }

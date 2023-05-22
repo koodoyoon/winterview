@@ -24,8 +24,14 @@
     </style>
 </head>
 <body>
-<a href="/login.do">로그인</a>
-<a href="/signup.do">회원가입</a>
+<!-- 로그인 상태가 아닐 때만 표시 -->
+<a th:if="${session.user == null}" href="/login.do">로그인</a>
+<a th:if="${session.user == null}" href="/signup.do">회원가입</a>
+
+<!-- 로그인 상태일 때만 표시 -->
+<a th:unless="${session.user == null}" href="/logout.do" onclick="return confirm('로그아웃 하시겠습니까?');">로그아웃</a>
+
+<!-- 질문 등록 창 - 로그인 상태일 때만 표시 -->
 <div th:if="${session.user != null}" id="container">
     <div id="question">
         <div class="mb-2">
@@ -50,35 +56,48 @@
             </div>
         </div>
         <div class="mb-2">
-            <button class="btn btn-secondary">랜덤 질문받기</button>
+            <button class="btn btn-secondary" id="random-question-button">랜덤 질문받기</button>
         </div>
         <div>
             <button class="btn btn-secondary">예상 질문 출력</button>
         </div>
-        <div>
-            <p>답변</p>
+        <div th:if="${question != null}">
+            <p th:text="${question.questionContent}"></p>
         </div>
     </div>
 </div>
 <script>
+    // 랜덤 질문 출력
+    document.getElementById('random-question-button').addEventListener('click', function() {
+        window.location.href = '/randomQuestion.do';
+    });
+
+    // 질문 등록
     $(document).ready(function() {
         $("#submit-button").click(function(e) {
             e.preventDefault();
             var questionContent = $("#exampleFormControlTextarea1").val();
-            $.ajax({
-                url: '/register.do',
-                type: 'POST',
-                data: {
-                    questionContent: questionContent
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert('질문 등록 성공');
-                    } else {
-                        alert('질문 등록 실패');
+
+            var confirmation = confirm("질문을 등록하시겠습니까?");
+
+            if (confirmation) {
+                $.ajax({
+                    url: '/register.do',
+                    type: 'POST',
+                    data: {
+                        questionContent: questionContent
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('질문 등록 성공');
+                            $('#staticBackdrop').modal('hide');
+                            $("#exampleFormControlTextarea1").val('');
+                        } else {
+                            alert('질문 등록 실패');
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     });
 </script>
