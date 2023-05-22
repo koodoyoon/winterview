@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
-<body>
+<div layout:fragment="content">
     <div>
         <form action="/login.do" method="post">
             <label for="userId"></label>
@@ -14,5 +18,5 @@
             <input type="submit" value="로그인">
         </form>
     </div>
-</body>
+</div>
 </html>

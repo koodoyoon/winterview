@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
@@ -55,5 +56,15 @@ public class QuestionController {
         model.addAttribute("question", question);
         System.out.println("question : " + question);
         return "index";
+    }
+
+    @GetMapping("/nextQuestion.do")
+    @ResponseBody
+    public QuestionDto getRandomQuestion(HttpSession session) {
+        UserDto user = (UserDto) session.getAttribute("user");
+        if (user == null) {
+            return null; // Or you can return a custom error object
+        }
+        return questionService.getRandomQuestion(user.getUserIdx());
     }
 }
