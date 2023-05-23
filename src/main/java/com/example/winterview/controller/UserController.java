@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
     UserSerivce userSerivce;
 
@@ -24,31 +24,31 @@ public class UserController {
     private Logger log = (Logger) LoggerFactory.getLogger(this.getClass());
 
     // 회원가입
-    @GetMapping("/signup.do")
+    @GetMapping("/signup")
     public String signup() {
-        return "/signup";
+        return "/user/signup";
     }
 
-    @PostMapping("/signup.do")
+    @PostMapping("/signup")
     public String signup(
         UserDto user
     ) {
         try {
             userSerivce.register(user);
-            return "redirect:/login.do";
+            return "redirect:/user/login";
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/signup.do";
+            return "redirect:/user/signup";
         }
     }
 
     // 로그인
-    @GetMapping("/login.do")
+    @GetMapping("/login")
     public String login() {
-        return "/login";
+        return "/user/login";
     }
 
-    @PostMapping("/login.do")
+    @PostMapping("/login")
     public String login(
             @RequestParam("userId") String id,
             String pw,
@@ -57,17 +57,17 @@ public class UserController {
         try {
             UserDto user = userSerivce.login(id, pw);
             if (user == null) { // 로그인 실패
-                return "redirect:/login.do";
+                return "/user/login";
             }
             session.setAttribute("user", user);
             return "redirect:/"; // 로그인 성공
         } catch (Exception e) {
             e.printStackTrace();
-            return "redirect:/login.do";
+            return "redirect:/login";
         }
     }
 
-    @GetMapping("/logout.do")
+    @GetMapping("/logout")
     public String logout(HttpSession session) {
         // 세션에 저장된 사용자 정보를 삭제합니다.
         session.invalidate();

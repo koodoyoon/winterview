@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<div layout:fragment="content">
+    <form action="/user/login" method="post">
+        <label for="userId"></label>
+        <input type="text" id="userId" name="userId" required>
+        <label for="pw"></label>
+        <input type="text" id="pw" name="pw" required>
+        <input type="submit" value="로그인">
+    </form>
+</div>
+</html>
