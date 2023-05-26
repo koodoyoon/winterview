@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content">
+    <!-- 질문 등록 창 - 로그인 상태일 때만 표시 -->
+    <div th:if="${session.user != null}"
+         style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+        <div style="width: 700px; height: 400px; border: 1px solid #7a7a7a; border-radius: 10px;">
+            <div class="mb-2">
+                <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-secondary">면접 예상 질문 등록
+                </button>
+            </div>
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/question/register" id="register-form" method="post">
+                                <label for="questionRegister" class="form-label">질문을 등록하세요</label>
+                                <textarea class="form-control" id="questionRegister" name="questionContent"
+                                          rows="3" required></textarea>
+                                <label for="answerRegister" class="form-label">답변을 등록하세요</label>
+                                <textarea class="form-control" id="answerRegister" name="answerContent"
+                                          rows="3"></textarea>
+                            </form>
+                            <button id="submit-button" type="submit" class="btn btn-primary">등록</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2">
+                <form id="random-question-form" action="/question/randomQuestion" method="get">
+                    <button class="btn btn-secondary" type="submit">랜덤 질문받기</button>
+                </form>
+            </div>
+            <div class="modal fade" id="questionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="questionModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" th:if="${qna != null}">
+                            <p th:text="${qna.questionContent}"></p>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                답변 보기
+                            </button>
+                            <div class="collapse mt-3" id="collapseExample">
+                                <div class="card card-body" th:text="${qna.answerContent}"></div>
+                                <form action="/question/submitAnswer" th:if="${qna.answerContent == null}">
+                                    <label for="answer-input"></label>
+                                    <textarea class="form-control" id="answer-input" style="display:none;"></textarea>
+                                    <input type="hidden" name="questionIdx" th:value="${qna.questionIdx}">
+                                    <button id="answer-submit-button" type="submit" class="btn btn-primary">등록</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button th:if="${qna == null || qna.answerContent == null}" id="answer-button" type="button" class="btn btn-primary">답변 달기</button>
+                            <button type="button" class="btn btn-primary" id="next-question-button">다음 질문</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 질문 & 답변 등록
+        $(document).ready(function () {
+            $("#submit-button").click(function(e) {
+                e.preventDefault();
+                $("#register-form").submit();
+            });
+        });
+        // 질문 보여주는 모달 창
+        $(document).ready(function () {
+            if ($('#questionModal .modal-body p').length) {
+                $('#questionModal').modal('show');
+            }
+        });
+        // 모달창에서 다음질문 버튼
+        $(document).ready(function () {
+            $("#next-question-button").click(function () {
+                $.get("/question/nextQuestion", function (data) {
+                    // 각 질문과 답변을 업데이트 합니다.
+                    $("#questionModal .modal-body p").text(data.questionContent);
+                    $("#questionModal .card.card-body").text(data.answerContent);
+                    $("#collapseExample").removeClass('show');
+                    console.log(data);
+                });
+            });
+        });
+
+        // $(document).ready(function () {
+        //     $("#answer-button").click(function () {
+        //         $("#answer-input").show();
+        //         $("#answer-submit-button").show();
+        //         $(this).hide();
+        //     });
+        //
+        //     $("#answer-submit-button").click(function (e) {
+        //         e.preventDefault();
+        //         var answerContent = $("#answer-input").val();
+        //         var questionIdx = /* 적절한 방법으로 질문 인덱스를 얻어야 합니다. */
+        //         if (!answerContent) {
+        //             alert('답변을 입력하세요.');
+        //             return;
+        //         }
+        //         $.ajax({
+        //             url: '/question/submitAnswer',
+        //             type: 'POST',
+        //             data: {
+        //                 answerContent: answerContent,
+        //                 questionIdx: questionIdx
+        //             },
+        //             success: function (response) {
+        //                 if (response.success) {
+        //                     alert('답변이 등록되었습니다.');
+        //                     location.reload();
+        //                 } else {
+        //                     alert('답변 등록 실패');
+        //                 }
+        //             }
+        //         });
+        //     });
+        // });
+    </script>
+</div>
+</html>

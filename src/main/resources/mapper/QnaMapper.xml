@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.winterview.mapper.QnaMapper">
+    <resultMap id="qnaMap" type="qnaDto" autoMapping="true">
+        <id property="questionIdx" column="question_idx"/>
+        <result property="questionContent" column="question_content"/>
+        <result property="userIdx" column="user_idx"/>
+        <result property="answerContent" column="answer_content"/>
+    </resultMap>
+    <insert id="insert">
+        INSERT INTO qna (question_content, user_idx, answer_content) VALUES (#{questionContent}, #{userIdx}, #{answerContent})
+    </insert>
+    <update id="updateAnswer">
+        UPDATE qna SET answer_content = #{answerContent} WHERE user_idx = #{userIdx} AND question_idx = #{questionIdx}
+    </update>
+    <select id="selectRandomQuestion" resultMap="qnaMap">
+        SELECT * FROM qna WHERE user_idx = #{userIdx} ORDER BY RAND() LIMIT 1
+    </select>
+    <select id="selectOne" resultMap="qnaMap">
+        SELECT * FROM qna WHERE question_idx = #{questionIdx}
+    </select>
+</mapper>
