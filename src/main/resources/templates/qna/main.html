@@ -100,39 +100,39 @@
             });
         });
 
-        // $(document).ready(function () {
-        //     $("#answer-button").click(function () {
-        //         $("#answer-input").show();
-        //         $("#answer-submit-button").show();
-        //         $(this).hide();
-        //     });
-        //
-        //     $("#answer-submit-button").click(function (e) {
-        //         e.preventDefault();
-        //         var answerContent = $("#answer-input").val();
-        //         var questionIdx = /* 적절한 방법으로 질문 인덱스를 얻어야 합니다. */
-        //         if (!answerContent) {
-        //             alert('답변을 입력하세요.');
-        //             return;
-        //         }
-        //         $.ajax({
-        //             url: '/question/submitAnswer',
-        //             type: 'POST',
-        //             data: {
-        //                 answerContent: answerContent,
-        //                 questionIdx: questionIdx
-        //             },
-        //             success: function (response) {
-        //                 if (response.success) {
-        //                     alert('답변이 등록되었습니다.');
-        //                     location.reload();
-        //                 } else {
-        //                     alert('답변 등록 실패');
-        //                 }
-        //             }
-        //         });
-        //     });
-        // });
+        $(document).ready(function () {
+            $("#answer-button").click(function () {
+                $("#answer-input").show();
+                $("#answer-submit-button").show();
+                $(this).hide();
+            });
+
+            $("#answer-submit-button").click(function (e) {
+                e.preventDefault();
+                var answerContent = $("#answer-input").val();
+                var questionIdx = /* 적절한 방법으로 질문 인덱스를 얻어야 합니다. */
+                if (!answerContent) {
+                    alert('답변을 입력하세요.');
+                    return;
+                }
+                $.ajax({
+                    url: '/question/submitAnswer',
+                    type: 'POST',
+                    data: {
+                        answerContent: answerContent,
+                        questionIdx: questionIdx
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert('답변이 등록되었습니다.');
+                            location.reload();
+                        } else {
+                            alert('답변 등록 실패');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </div>
 </html>
