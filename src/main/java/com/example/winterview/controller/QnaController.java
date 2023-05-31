@@ -55,7 +55,6 @@ public class QnaController {
         try {
             QnaDto qna = qnaService.getRandomQuestion(user.getUserIdx());
             model.addAttribute("qna", qna);
-            System.out.println("qna : " + qna);
             return "/qna/main";
         } catch (Exception e) {
             return "/user/login";
