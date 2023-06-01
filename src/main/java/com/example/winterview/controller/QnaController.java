@@ -17,7 +17,6 @@ import java.util.Map;
 @RequestMapping("/question")
 public class QnaController {
     private QnaService qnaService;
-    private ObjectMapper objectMapper;
 
     public QnaController(QnaService qnaService) {
         this.qnaService = qnaService;
