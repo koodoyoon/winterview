@@ -22,6 +22,7 @@ public class QnaController {
         this.qnaService = qnaService;
     }
 
+    // QNA 메인 페이지 로딩
     @GetMapping("/main")
     public String main() {
         try {
@@ -31,6 +32,7 @@ public class QnaController {
         }
     }
 
+    // 질문 등록
     @PostMapping("/register")
     public String register(
         QnaDto qna,
@@ -47,6 +49,7 @@ public class QnaController {
         }
     }
 
+    // 질문 랜덤 생성
     @GetMapping("/randomQuestion")
     public String getRandomQuestion(
             Model model,
@@ -60,6 +63,7 @@ public class QnaController {
         }
     }
 
+    // 다음 질문 불러오기
     @GetMapping("/nextQuestion")
     @ResponseBody
     public QnaDto getRandomQuestion(
@@ -74,6 +78,7 @@ public class QnaController {
         }
     }
 
+    // 답변 등록
     @PostMapping("/submitAnswer")
     public ResponseEntity<?> submitAnswer(
             @RequestParam int questionIdx,
