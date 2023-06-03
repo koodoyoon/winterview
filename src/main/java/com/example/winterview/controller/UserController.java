@@ -67,6 +67,7 @@ public class UserController {
         }
     }
 
+    // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // 세션에 저장된 사용자 정보를 삭제합니다.
