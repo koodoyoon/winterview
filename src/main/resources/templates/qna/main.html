@@ -99,6 +99,16 @@
                 });
             });
         });
+        // QNA 등록 confirm
+        $(document).ready(function(){
+            $("#submit-button").click(function(event){
+                event.preventDefault();
+                if(confirm('등록하시겠습니까?')) {
+                    $('#register-form').submit();
+                    alert('등록이 완료되었습니다.');
+                }
+            });
+        });
 
         // $(document).ready(function () {
         //     $("#answer-button").click(function () {
