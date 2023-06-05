@@ -51,28 +51,28 @@ public class QnaController {
 
     // 질문 랜덤 생성
     @GetMapping("/randomQuestion")
-    public String getRandomQuestion(
-            Model model,
+    @ResponseBody
+    public QnaDto getRandomQuestion(
             @SessionAttribute UserDto user) {
         try {
             QnaDto qna = qnaService.getRandomQuestion(user.getUserIdx());
-            model.addAttribute("qna", qna);
-            return "/qna/main";
+            System.out.println(qna);
+            return qna;
         } catch (Exception e) {
-            return "/user/login";
+            return null;
         }
     }
 
     // 다음 질문 불러오기
     @GetMapping("/nextQuestion")
     @ResponseBody
-    public QnaDto getRandomQuestion(
+    public QnaDto getNextQuestion(
             @SessionAttribute UserDto user
     ) {
         try {
             QnaDto qna = qnaService.getRandomQuestion(user.getUserIdx());
             System.out.println(qna);
-            return qnaService.getRandomQuestion(user.getUserIdx());
+            return qna;
         } catch (Exception e) {
             return null;
         }

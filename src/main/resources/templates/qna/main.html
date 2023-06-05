@@ -38,9 +38,7 @@
                 </div>
             </div>
             <div class="mb-2">
-                <form id="random-question-form" action="/question/randomQuestion" method="get">
-                    <button class="btn btn-secondary" type="submit">랜덤 질문받기</button>
-                </form>
+                <button class="btn btn-secondary" type="button" id="random-question-button">랜덤 질문받기</button>
             </div>
             <div class="modal fade" id="questionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="questionModalLabel"
                  aria-hidden="true">
@@ -49,23 +47,22 @@
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body" th:if="${qna != null}">
-                            <p th:text="${qna.questionContent}"></p>
+                        <div class="modal-body">
+                            <p id="questionContent"></p>
                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                 답변 보기
                             </button>
                             <div class="collapse mt-3" id="collapseExample">
-                                <div class="card card-body" th:text="${qna.answerContent}"></div>
-                                <form action="/question/submitAnswer" th:if="${qna.answerContent == null}">
+                                <div id="answerContent" class="card card-body"></div>
+                                <form id="againAnswer" action="/question/submitAnswer">
                                     <label for="answer-input"></label>
-                                    <textarea class="form-control" id="answer-input" style="display:none;"></textarea>
-                                    <input type="hidden" name="questionIdx" th:value="${qna.questionIdx}">
+                                    <textarea class="form-control" id="answer-input" placeholder="답변이 비어있습니다. 답변을 등록하세요."></textarea>
+                                    <input type="hidden" name="questionIdx">
                                     <button id="answer-submit-button" type="submit" class="btn btn-primary">등록</button>
                                 </form>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button th:if="${qna == null || qna.answerContent == null}" id="answer-button" type="button" class="btn btn-primary">답변 달기</button>
                             <button type="button" class="btn btn-primary" id="next-question-button">다음 질문</button>
                         </div>
                     </div>
@@ -78,71 +75,43 @@
         $(document).ready(function () {
             $("#submit-button").click(function(e) {
                 e.preventDefault();
-                $("#register-form").submit();
-            });
-        });
-        // 질문 보여주는 모달 창
-        $(document).ready(function () {
-            if ($('#questionModal .modal-body p').length) {
-                $('#questionModal').modal('show');
-            }
-        });
-        // 모달창에서 다음질문 버튼
-        $(document).ready(function () {
-            $("#next-question-button").click(function () {
-                $.get("/question/nextQuestion", function (data) {
-                    // 각 질문과 답변을 업데이트 합니다.
-                    $("#questionModal .modal-body p").text(data.questionContent);
-                    $("#questionModal .card.card-body").text(data.answerContent);
-                    $("#collapseExample").removeClass('show');
-                    console.log(data);
-                });
-            });
-        });
-        // QNA 등록 confirm
-        $(document).ready(function(){
-            $("#submit-button").click(function(event){
-                event.preventDefault();
-                if(confirm('등록하시겠습니까?')) {
-                    $('#register-form').submit();
+                if (confirm('등록하시겠습니까?')) {
+                    $("#register-form").submit();
                     alert('등록이 완료되었습니다.');
                 }
             });
         });
+        // 질문 보여주는 모달 창
+        $(document).ready(function () {
 
-        // $(document).ready(function () {
-        //     $("#answer-button").click(function () {
-        //         $("#answer-input").show();
-        //         $("#answer-submit-button").show();
-        //         $(this).hide();
-        //     });
-        //
-        //     $("#answer-submit-button").click(function (e) {
-        //         e.preventDefault();
-        //         var answerContent = $("#answer-input").val();
-        //         var questionIdx = /* 적절한 방법으로 질문 인덱스를 얻어야 합니다. */
-        //         if (!answerContent) {
-        //             alert('답변을 입력하세요.');
-        //             return;
-        //         }
-        //         $.ajax({
-        //             url: '/question/submitAnswer',
-        //             type: 'POST',
-        //             data: {
-        //                 answerContent: answerContent,
-        //                 questionIdx: questionIdx
-        //             },
-        //             success: function (response) {
-        //                 if (response.success) {
-        //                     alert('답변이 등록되었습니다.');
-        //                     location.reload();
-        //                 } else {
-        //                     alert('답변 등록 실패');
-        //                 }
-        //             }
-        //         });
-        //     });
-        // });
+            function loadQuestion(url) {
+                $.get(url, function (data) {
+                    $("#answerContent").remove();
+
+                    $("#questionModal .modal-body p").text(data.questionContent);
+                    $("#questionIdx").val(data.questionIdx);
+
+                    if (data.answerContent === null) {
+                        $("#againAnswer").show();
+                    } else {
+                        $("#againAnswer").hide();
+                        let answerContent = $('<div id="answerContent" class="card card-body"></div>').text(data.answerContent);
+                        $("#collapseExample").prepend(answerContent);
+                    }
+                    $("#collapseExample").removeClass('show');
+                    $('#questionModal').modal('show');
+                });
+            }
+
+            $("#random-question-button").click(function () {
+                loadQuestion("/question/randomQuestion");
+            });
+
+            $("#next-question-button").click(function () {
+                loadQuestion("/question/nextQuestion");
+            });
+        });
+
     </script>
 </div>
 </html>
