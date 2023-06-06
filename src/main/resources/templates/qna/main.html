@@ -8,52 +8,70 @@
     <title>Title</title>
 </head>
 <div layout:fragment="content">
-    <!-- 질문 등록 창 - 로그인 상태일 때만 표시 -->
+    <!-- QNA 메인 페이지 - 로그인 상태일 때만 표시 -->
     <div th:if="${session.user != null}"
          style="height: 100vh; display: flex; justify-content: center; align-items: center;">
         <div style="width: 700px; height: 400px; border: 1px solid #7a7a7a; border-radius: 10px;">
+
+            <!-- 질문 등록 버튼 -->
             <div class="mb-2">
-                <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-secondary">면접 예상 질문 등록
-                </button>
+                <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-secondary">면접 예상 질문 등록</button>
             </div>
+
+            <!-- 질문 등록 모달창 -->
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
+                        <!-- 모달 헤드 -->
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+
+                        <!-- 모달 바디 - QNA 등록 폼 -->
                         <div class="modal-body">
                             <form action="/question/register" id="register-form" method="post">
                                 <label for="questionRegister" class="form-label">질문을 등록하세요</label>
-                                <textarea class="form-control" id="questionRegister" name="questionContent"
-                                          rows="3" required></textarea>
+                                <textarea class="form-control" id="questionRegister" name="questionContent" rows="3" required></textarea>
+                                <!-- 답변은 등록해도 되고 생량해도 상관 없음 -->
                                 <label for="answerRegister" class="form-label">답변을 등록하세요</label>
-                                <textarea class="form-control" id="answerRegister" name="answerContent"
-                                          rows="3"></textarea>
+                                <textarea class="form-control" id="answerRegister" name="answerContent" rows="3"></textarea>
                             </form>
                             <button id="submit-button" type="submit" class="btn btn-primary">등록</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- 질문 받기 버튼 -->
             <div class="mb-2">
                 <button class="btn btn-secondary" type="button" id="random-question-button">랜덤 질문받기</button>
             </div>
-            <div class="modal fade" id="questionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="questionModalLabel"
+
+            <!-- 질문 나오는 모달창 -->
+            <div class="modal fade" id="qnaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="questionModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
+                        <!-- 모달 헤드 -->
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+
+                        <!-- 모달 바디 - QNA -->
                         <div class="modal-body">
+                            <!-- 질문 내용이 나올 p태그 -->
                             <p id="questionContent"></p>
+                            <!-- 질문에 대한 답변 보기 버튼 -->
                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                                 답변 보기
                             </button>
+
+                            <!-- QNA -->
                             <div class="collapse mt-3" id="collapseExample">
+                                <!-- 질문 내용 -->
                                 <div id="answerContent" class="card card-body"></div>
+                                <!-- 질문에 대한 답변이 있으면 숨겨지고 없으면 등록할 수 있게 나타나는 폼태그 -->
                                 <form id="againAnswer" action="/question/submitAnswer">
                                     <label for="answer-input"></label>
                                     <textarea class="form-control" id="answer-input" placeholder="답변이 비어있습니다. 답변을 등록하세요."></textarea>
@@ -62,6 +80,7 @@
                                 </form>
                             </div>
                         </div>
+                        <!-- 다음 질문을 볼 수 있는 버튼 -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" id="next-question-button">다음 질문</button>
                         </div>
@@ -70,6 +89,7 @@
             </div>
         </div>
     </div>
+
     <script>
         // 질문 & 답변 등록
         $(document).ready(function () {
@@ -81,37 +101,47 @@
                 }
             });
         });
+
         // 질문 보여주는 모달 창
         $(document).ready(function () {
 
+            // loadQuestion 함수: url을 입력으로 받아 해당 url로 GET 요청을 보내는 함수
             function loadQuestion(url) {
+                // 해당 url로 GET 요청을 보내는 코드
                 $.get(url, function (data) {
+                    // 이미 존재하는 답변 내용을 modal에서 제거
                     $("#answerContent").remove();
-
-                    $("#questionModal .modal-body p").text(data.questionContent);
+                    // 서버로부터 받은 데이터로 modal 내의 질문 내용을 채움
+                    $("#qnaModal .modal-body p").text(data.questionContent);
                     $("#questionIdx").val(data.questionIdx);
 
+                    // 받은 데이터의 answerContent가 null이라면 답변 입력 form을 보여주고, 아니라면 숨김
                     if (data.answerContent === null) {
                         $("#againAnswer").show();
                     } else {
                         $("#againAnswer").hide();
+                        // answerContent를 생성하여 받은 답변 내용으로 채움
                         let answerContent = $('<div id="answerContent" class="card card-body"></div>').text(data.answerContent);
+                        // answerContent를 #collapseExample의 앞에 추가
                         $("#collapseExample").prepend(answerContent);
                     }
+                    // 답변 보기 부분을 닫아둠
                     $("#collapseExample").removeClass('show');
-                    $('#questionModal').modal('show');
+                    // questionModal을 보여줌
+                    $('#qnaModal').modal('show');
                 });
             }
 
+            // '랜덤 질문받기' 버튼이 클릭되면 /question/randomQuestion url로 GET 요청을 보내는 코드
             $("#random-question-button").click(function () {
                 loadQuestion("/question/randomQuestion");
             });
 
+            // '다음 질문' 버튼이 클릭되면 /question/nextQuestion url로 GET 요청을 보내는 코드
             $("#next-question-button").click(function () {
                 loadQuestion("/question/nextQuestion");
             });
         });
-
     </script>
 </div>
 </html>
