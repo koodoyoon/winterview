@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/js/bootstrap.bundle.min.js"></script>
 </head>
-<body class="container">
+<body>
 
     <!-- 헤더 -->
     <header>
@@ -16,11 +16,14 @@
     </header>
 
     <!-- 메인 -->
-    <main>
+    <main class="container">
         <th:block layout:fragment="content"></th:block>
     </main>
 
     <!-- 푸터 -->
+    <footer>
+        <th:block th:replace="~{/layout/footer.html}"></th:block>
+    </footer>
 
 </body>
 </html>
