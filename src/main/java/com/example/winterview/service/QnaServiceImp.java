@@ -19,11 +19,11 @@ public class QnaServiceImp implements QnaService {
         return qnaMapper.selectRandomQuestion(userIdx);
     }
 
-    public void submitAnswer(int userIdx, int questionIdx, String answerContent) {
-        qnaMapper.updateAnswer(userIdx, questionIdx, answerContent);
-    }
-
     public QnaDto selectOne(int questionIdx) {
         return qnaMapper.selectOne(questionIdx);
+    }
+
+    public int addAnswer(QnaDto qnaDto) {
+        return qnaMapper.updateAnswer(qnaDto);
     }
 }

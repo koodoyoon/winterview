@@ -75,7 +75,8 @@
                                 <form id="againAnswer" action="/question/submitAnswer">
                                     <label for="answer-input"></label>
                                     <textarea class="form-control" id="answer-input" placeholder="답변이 비어있습니다. 답변을 등록하세요."></textarea>
-                                    <input type="hidden" name="questionIdx">
+                                    <input type="hidden" id="userIdx" name="userIdx">
+                                    <input type="hidden" id="questionIdx" name="questionIdx">
                                     <button id="answer-submit-button" type="submit" class="btn btn-primary">등록</button>
                                 </form>
                             </div>
@@ -114,6 +115,7 @@
                     // 서버로부터 받은 데이터로 modal 내의 질문 내용을 채움
                     $("#qnaModal .modal-body p").text(data.questionContent);
                     $("#questionIdx").val(data.questionIdx);
+                    $("#userIdx").val(data.userIdx);
 
                     // 받은 데이터의 answerContent가 null이라면 답변 입력 form을 보여주고, 아니라면 숨김
                     if (data.answerContent === null) {

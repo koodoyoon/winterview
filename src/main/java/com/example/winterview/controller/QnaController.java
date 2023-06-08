@@ -79,18 +79,9 @@ public class QnaController {
     }
 
     // 답변 등록
-    @PostMapping("/submitAnswer")
-    public ResponseEntity<?> submitAnswer(
-            @RequestParam int questionIdx,
-            @RequestParam String answerContent,
-            @SessionAttribute UserDto user
-    ) {
-        try {
-            qnaService.submitAnswer(user.getUserIdx(), questionIdx, answerContent);
-            return new ResponseEntity<>(Map.of("success", true), HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(Map.of("success", false), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping("/question/submitAnswer")
+    public String submitAnswer(@ModelAttribute QnaDto qnaDto) {
+        qnaService.addAnswer(qnaDto);
+        return "/qna/main";
     }
 }
