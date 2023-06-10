@@ -80,8 +80,10 @@ public class QnaController {
 
     // 답변 등록
     @PostMapping("/question/submitAnswer")
-    public String submitAnswer(@ModelAttribute QnaDto qnaDto) {
-        qnaService.addAnswer(qnaDto);
+    public String submitAnswer(@ModelAttribute QnaDto qna) {
+        System.out.println("submitAnswer called");
+        qnaService.addAnswer(qna);
+        System.out.println(qna);
         return "/qna/main";
     }
 }

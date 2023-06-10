@@ -72,9 +72,9 @@
                                 <!-- 질문 내용 -->
                                 <div id="answerContent" class="card card-body"></div>
                                 <!-- 질문에 대한 답변이 있으면 숨겨지고 없으면 등록할 수 있게 나타나는 폼태그 -->
-                                <form id="againAnswer" action="/question/submitAnswer">
+                                <form id="againAnswer" action="/question/submitAnswer" method="post">
                                     <label for="answer-input"></label>
-                                    <textarea class="form-control" id="answer-input" placeholder="답변이 비어있습니다. 답변을 등록하세요."></textarea>
+                                    <textarea class="form-control" id="answer-input" name="answerContent" placeholder="답변이 비어있습니다. 답변을 등록하세요."></textarea>
                                     <input type="hidden" id="userIdx" name="userIdx">
                                     <input type="hidden" id="questionIdx" name="questionIdx">
                                     <button id="answer-submit-button" type="submit" class="btn btn-primary">등록</button>
