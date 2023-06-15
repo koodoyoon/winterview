@@ -9,11 +9,15 @@
 </head>
 <div layout:fragment="content">
     <div class="container" style="border: 1px solid black;">
-        <h1>승리하는 면접</h1>
-        <h1>Win terView</h1>
-        <h1>면접연습 하러가기</h1>
+<!--        <h1>승리하는 면접</h1>-->
+<!--        <h1>Win terView</h1>-->
+<!--        <h1>면접연습 하러가기</h1>-->
         <h1 th:if="${session.user != null}"><a href="/question/main">Go</a></h1>
         <h1 th:if="${session.user == null}"><a href="/user/login">Go</a></h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="제출">
+        </form>
     </div>
 </div>
 </html>
