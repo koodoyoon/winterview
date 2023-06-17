@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 public interface QnaService {
 
-    @Value("${img.upload.path}")
     int register(QnaDto qna);
 
     QnaDto getRandomQuestion(int userIdx);
