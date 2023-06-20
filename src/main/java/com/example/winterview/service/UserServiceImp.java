@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImp implements UserSerivce{
     private UserMapper userMapper;
-    public UserServiceImp(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    public UserServiceImp(UserMapper userMapper) {this.userMapper = userMapper;}
 
     public int register(UserDto user) {
         return userMapper.insert(user);
